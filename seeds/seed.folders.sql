@@ -1,0 +1,12 @@
+insert into folders (name) values ('Matsoft');
+insert into folders (name) values ('Sonsing');
+insert into folders (name) values ('Vagram');
+insert into folders (name) values ('Konklab');
+insert into folders (name) values ('Job');
+insert into folders (name) values ('Konklab');
+insert into folders (name) values ('It');
+insert into folders (name) values ('Holdlamis');
+insert into folders (name) values ('Andalax');
+insert into folders (name) values ('Fintone');
+insert into folders (name) values ('Prodder');
+insert into folders (name) values ('Lotlux');

@@ -17,9 +17,20 @@ const app = express();
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 app.use(morgan(morganOption));
-app.use(cors());
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin - like mobile apps, curl, postman
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not ' +
+          'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
 app.use(helmet());
-
 // app.use(function validateBearerToken(req, res, next) {
 //   const apiToken = process.env.API_TOKEN;
 //   const authToken = req.get('Authorization');
@@ -36,16 +47,16 @@ app.use(helmet());
 
 app.use('/folders', foldersRouter);
 app.use('/notes', notesRouter);
+app.use(errorHandler);
 
-app.use(function errorHandler(error, req, res, next) {
-  let response;
+function errorHandler(error, req, res, next) {
+  const code = error.status || 500;
   if (NODE_ENV === 'production') {
-    response = { error: { message: 'server error' } };
+    error.message = code === 500 ? 'internal server error' : error.message;
   } else {
     console.error(error);
-    response = { message: error.message, error };
   }
-  res.status(500).json(response);
-});
+  res.status(code).json({message: error.message});
+}
 
 module.exports = app;

@@ -47,7 +47,7 @@ app.use(helmet());
 
 app.use('/folders', foldersRouter);
 app.use('/notes', notesRouter);
-app.use(errorHandler);
+//app.use(errorHandler);
 
 function errorHandler(error, req, res, next) {
   const code = error.status || 500;

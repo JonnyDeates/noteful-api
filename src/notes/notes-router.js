@@ -52,7 +52,7 @@ notesRouter
                 error: {message: error}
             });
         }
-        const note = {name, date_added, folder_id, content};
+        const note = {title, date_added, folder_id, content};
         const knexInstance = req.app.get('db');
         NotesService.insertNote(knexInstance, note)
             .then(note => {
@@ -107,7 +107,7 @@ notesRouter
                 error: {message: error}
             });
         }
-        const note = {name, date_added, folder_id, content};
+        const note = {title, date_added, folder_id, content};
         const knexInstance = req.app.get('db');
         NotesService.updateNotes(knexInstance, note_id, note)
             .then(notes => {

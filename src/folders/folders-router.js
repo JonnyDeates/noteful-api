@@ -12,7 +12,7 @@ const knexInstance = knex({
 
 const serializeFolder = folder => ({
     id: folder.id,
-    name: xss(folder.title)
+    folder_name: xss(folder.folder_name)
 });
 
 foldersRouter
@@ -26,16 +26,16 @@ foldersRouter
             .catch(next);
     })
     .post(bodyParser, (req, res, next) => {
-        const {name} = req.body;
+        const {folder_name} = req.body;
 
-        if (!name) {
+        if (!folder_name) {
             const error = 'Name is required';
             logger.error(error);
             return res.status(400).send({
                 error: {message: error}
             });
         }
-        const folder = {name};
+        const folder = {folder_name};
         const knexInstance = req.app.get('db');
         FolderService.insertFolder(knexInstance, folder)
             .then(folder => {
@@ -67,14 +67,14 @@ foldersRouter
         res.json(res.folder)
     })
     .patch(bodyParser, (req, res, next) => {
-        const {name} = req.body;
+        const {folder_name} = req.body;
         const {id} = req.params;
-        if (!name) {
+        if (!folder_name) {
             const error = 'Name is required';
             logger.error(error);
             return res.status(400).send(error);
         }
-        const folder = {name};
+        const folder = {folder_name};
         const knexInstance = req.app.get('db');
         FolderService.updateFolders(knexInstance, id, folder)
             .then(folders => {

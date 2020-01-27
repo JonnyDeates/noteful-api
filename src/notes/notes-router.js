@@ -12,9 +12,9 @@ const knexInstance = knex({
 
 const serializeNotes = note => ({
     id: note.id,
-    name: xss(note.title),
-    modified: note.modified,
-    folderid: note.folderid,
+    title: xss(note.title),
+    date_added: new Date(),
+    folder_id: note.folder_id,
     content: xss(note.content)
 });
 
@@ -29,16 +29,16 @@ notesRouter
             .catch(next);
     })
     .post(bodyParser, (req, res, next) => {
-        const {name, modified, folderid, content} = req.body;
+        const {title, date_added, folder_id, content} = req.body;
 
-        if (!name) {
+        if (!title) {
             const error = 'Name is required';
             logger.error(error);
             return res.status(400).send({
                 error: {message: error}
             });
         }
-        if (!folderid) {
+        if (!folder_id) {
             const error = 'FolderID is required';
             logger.error(error);
             return res.status(400).send({
@@ -52,7 +52,7 @@ notesRouter
                 error: {message: error}
             });
         }
-        const note = {name, modified, folderid, content};
+        const note = {name, date_added, folder_id, content};
         const knexInstance = req.app.get('db');
         NotesService.insertNote(knexInstance, note)
             .then(note => {
@@ -64,10 +64,10 @@ notesRouter
             .catch(next);
     });
 notesRouter
-    .route('/:id')
+    .route('/:note_id')
     .all((req, res, next) => {
-        const {id} = req.params;
-        NotesService.getById(knexInstance, id)
+        const {note_id} = req.params;
+        NotesService.getById(knexInstance, note_id)
             .then(note => {
                 if (!note) {
                     return res.status(404).json({
@@ -84,16 +84,16 @@ notesRouter
         res.json(res.note)
     })
     .patch(bodyParser, (req, res, next) => {
-        const {name, modified, folderid, content} = req.body;
-        const {id} = req.params;
-        if (!name) {
+        const {title, date_added, folder_id, content} = req.body;
+        const {note_id} = req.params;
+        if (!title) {
             const error = 'Name is required';
             logger.error(error);
             return res.status(400).send({
                 error: {message: error}
             });
         }
-        if (!folderid) {
+        if (!folder_id) {
             const error = 'FolderID is required';
             logger.error(error);
             return res.status(400).send({
@@ -107,18 +107,18 @@ notesRouter
                 error: {message: error}
             });
         }
-        const note = {name, modified, folderid, content};
+        const note = {name, date_added, folder_id, content};
         const knexInstance = req.app.get('db');
-        NotesService.updateNotes(knexInstance, id, note)
+        NotesService.updateNotes(knexInstance, note_id, note)
             .then(notes => {
                 res.json(notes);
             })
             .catch(next);
     })
     .delete((req, res, next) => {
-        const {id} = req.params;
+        const {note_id} = req.params;
         const knexInstance = req.app.get('db');
-        NotesService.deleteNote(knexInstance, id)
+        NotesService.deleteNote(knexInstance, note_id)
             .then(notes => {
                 res.status(204).json(notes);
             })

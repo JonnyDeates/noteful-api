@@ -7,7 +7,7 @@ const FolderService = require('./folders-service');
 const knex = require('knex');
 const knexInstance = knex({
     client: 'pg',
-    connection: process.env.DB_URL,
+    connection: process.env.DATABASE_URL,
 });
 
 const serializeFolder = folder => ({

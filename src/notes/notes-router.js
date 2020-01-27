@@ -7,7 +7,7 @@ const NotesService = require('./notes-service');
 const knex = require('knex');
 const knexInstance = knex({
     client: 'pg',
-    connection: process.env.DB_URL,
+    connection: process.env.DATABASE_URL,
 });
 
 const serializeNotes = note => ({

@@ -11,7 +11,8 @@ const app = express();
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 app.use(morgan(morganOption));
-const allowedOrigins = ['https://noteful-client.jonnydeates.now.sh', "https://noteful-client-rho-eight.now.sh", 'https://noteful-client-eevfzhhom.now.sh'];
+const allowedOrigins = ['https://noteful-client-k3v0reaaz.now.sh', 'https://noteful-client.jonnydeates.now.sh',
+  "https://noteful-client-rho-eight.now.sh", 'https://noteful-client-eevfzhhom.now.sh'];
 app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin - like mobile apps, curl, postman
